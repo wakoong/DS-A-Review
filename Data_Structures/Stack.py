@@ -1,4 +1,4 @@
-# FILO - First In Last Out
+# LIFO - Last In First Out
 # Implemented with list
 class Stack:
   def __init__(self):
