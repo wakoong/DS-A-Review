@@ -74,8 +74,42 @@ class LinkedList:
           return
         prev = curr
         curr = curr.next
-      
 
+  def delete_head(self):
+    if not self.head:
+      return None
+    
+    oldHead = self.head
+    self.head = self.head.next
+
+    if self.head is None:
+      self.tail = None
+  
+    self.count -= 1
+
+    return oldHead
+  
+  def delete_tail(self):
+    # zero node
+    if not self.tail:
+       return None
+
+    oldTail = self.tail  
+    # one node
+    if self.head == self.tail:
+      self.head = self.tail = None
+
+    # more than one node
+    else:
+       curr = self.head
+       while curr.next != self.tail:
+          curr = curr.next
+       self.tail = curr
+       self.tail.next = None
+    
+    self.count -= 1
+    return oldTail
+      
   # find
   def find(self, val):
     curr = self.head
@@ -87,10 +121,10 @@ class LinkedList:
 
     return None
   
-  def getFirstNode(self):
+  def get_first_node(self):
     return self.head
   
-  def getLastNode(self):
+  def get_last_node(self):
     return self.tail
    
   def reverse(self):
@@ -124,33 +158,33 @@ class TestLinkedList(unittest.TestCase):
         self.ll.append(1)
         self.ll.append(2)
         self.ll.append(3)
-        self.assertEqual(self.ll.getFirstNode().val, 1)
-        self.assertEqual(self.ll.getLastNode().val, 3)
+        self.assertEqual(self.ll.get_first_node().val, 1)
+        self.assertEqual(self.ll.get_last_node().val, 3)
         self.assertEqual(self.ll.count, 3)
 
     def test_insert(self):
         self.ll.append(1)
         self.ll.append(3)
         self.ll.insert(2, 1)
-        self.assertEqual(self.ll.getFirstNode().val, 1)
+        self.assertEqual(self.ll.get_first_node().val, 1)
         self.assertEqual(self.ll.find(2).val, 2)
-        self.assertEqual(self.ll.getLastNode().val, 3)
+        self.assertEqual(self.ll.get_last_node().val, 3)
         self.assertEqual(self.ll.count, 3)
     
     def test_insert_at_head(self):
         self.ll.insert(1, 0)
         self.ll.insert(2, 0)
         self.ll.insert(3, 0)
-        self.assertEqual(self.ll.getFirstNode().val, 3)
-        self.assertEqual(self.ll.getLastNode().val, 1)
+        self.assertEqual(self.ll.get_first_node().val, 3)
+        self.assertEqual(self.ll.get_last_node().val, 1)
         self.assertEqual(self.ll.count, 3)
 
     def test_insert_at_tail(self):
         self.ll.insert(1, 0)
         self.ll.insert(2, 1)
         self.ll.insert(3, 2)
-        self.assertEqual(self.ll.getFirstNode().val, 1)
-        self.assertEqual(self.ll.getLastNode().val, 3)
+        self.assertEqual(self.ll.get_first_node().val, 1)
+        self.assertEqual(self.ll.get_last_node().val, 3)
         self.assertEqual(self.ll.count, 3)
 
     def test_delete(self):
@@ -159,22 +193,22 @@ class TestLinkedList(unittest.TestCase):
         self.ll.append(3)
         self.ll.delete(2)
         self.assertIsNone(self.ll.find(2))
-        self.assertEqual(self.ll.getFirstNode().val, 1)
-        self.assertEqual(self.ll.getLastNode().val, 3)
+        self.assertEqual(self.ll.get_first_node().val, 1)
+        self.assertEqual(self.ll.get_last_node().val, 3)
         self.assertEqual(self.ll.count, 2)
 
     def test_delete_head(self):
         self.ll.append(1)
         self.ll.append(2)
-        self.ll.delete(1)
-        self.assertEqual(self.ll.getFirstNode().val, 2)
+        self.ll.delete_head()
+        self.assertEqual(self.ll.get_first_node().val, 2)
         self.assertEqual(self.ll.count, 1)
 
     def test_delete_tail(self):
         self.ll.append(1)
         self.ll.append(2)
-        self.ll.delete(2)
-        self.assertEqual(self.ll.getLastNode().val, 1)
+        self.ll.delete_tail()
+        self.assertEqual(self.ll.get_last_node().val, 1)
         self.assertEqual(self.ll.count, 1)
 
     def test_find(self):
@@ -189,23 +223,23 @@ class TestLinkedList(unittest.TestCase):
         self.ll.append(2)
         self.ll.append(3)
         self.ll.reverse()
-        self.assertEqual(self.ll.getFirstNode().val, 3)
-        self.assertEqual(self.ll.getLastNode().val, 1)
+        self.assertEqual(self.ll.get_first_node().val, 3)
+        self.assertEqual(self.ll.get_last_node().val, 1)
         self.assertEqual(self.ll.head.val, 3)
         self.assertEqual(self.ll.tail.val, 1)
 
     def test_reverse_single_node(self):
         self.ll.append(1)
         self.ll.reverse()
-        self.assertEqual(self.ll.getFirstNode().val, 1)
-        self.assertEqual(self.ll.getLastNode().val, 1)
+        self.assertEqual(self.ll.get_first_node().val, 1)
+        self.assertEqual(self.ll.get_last_node().val, 1)
         self.assertEqual(self.ll.head.val, 1)
         self.assertEqual(self.ll.tail.val, 1)
 
     def test_reverse_empty_list(self):
         self.ll.reverse()
-        self.assertIsNone(self.ll.getFirstNode())
-        self.assertIsNone(self.ll.getLastNode())
+        self.assertIsNone(self.ll.get_first_node())
+        self.assertIsNone(self.ll.get_last_node())
 
 if __name__ == '__main__':
     unittest.main()
