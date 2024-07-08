@@ -56,24 +56,32 @@ class LinkedList:
       return None
     
     # Delete head
-    if self.head.val == val:
-      self.head = self.head.next
-      if not self.head:
-        self.tail = None
-      self.count -= 1
-      return
-    else:
-      prev = self.head
-      curr = self.head.next
-      while curr:
-        if curr.val == val:
-          prev.next = curr.next
-          if curr == self.tail:
-            self.tail = prev
-          self.count -= 1 
-          return
-        prev = curr
-        curr = curr.next
+    # if self.head.val == val:
+    #   self.head = self.head.next
+    #   if not self.head: # List is now empty
+    #     self.tail = None
+    #   self.count -= 1
+    #   return None
+    
+    sentinel = Node(-1)
+    sentinel.next = self.head
+    prev = sentinel
+    curr = self.head
+
+    while curr:
+      if curr.val == val:
+        # The sentinel node implicity set curr.next as the new head
+        # if curr is head (it is more clear to explicitly set the new head)
+        prev.next = curr.next
+        if curr == self.tail: # Update tail if the deleted node was the tail
+          self.tail = prev
+        self.count -= 1 
+        self.head = sentinel.next # Explicitly update head
+        return None
+      prev = curr
+      curr = curr.next
+    
+    return None # Value not found
 
   def delete_head(self):
     if not self.head:
@@ -146,7 +154,22 @@ class LinkedList:
     # update head
     self.head = prev
     return self.head 
+  
+  def reverse_recurisve(self):
+    def _reverse_recurisve(curr):
+      if not curr or not curr.next:
+        return curr 
+      
+      new_head = _reverse_recurisve(curr.next) # go until the last node is reached
 
+      curr.next.next = curr
+      curr.next = None
+      
+      return new_head 
+
+    self.tail = self.head
+    self.head = _reverse_recurisve(self.head)
+     
 # Test Cases 
 import unittest
 
@@ -231,6 +254,24 @@ class TestLinkedList(unittest.TestCase):
     def test_reverse_single_node(self):
         self.ll.append(1)
         self.ll.reverse()
+        self.assertEqual(self.ll.get_first_node().val, 1)
+        self.assertEqual(self.ll.get_last_node().val, 1)
+        self.assertEqual(self.ll.head.val, 1)
+        self.assertEqual(self.ll.tail.val, 1)
+
+    def test_reverse_recursive(self):
+        self.ll.append(1)
+        self.ll.append(2)
+        self.ll.append(3)
+        self.ll.reverse_recurisve()
+        self.assertEqual(self.ll.get_first_node().val, 3)
+        self.assertEqual(self.ll.get_last_node().val, 1)
+        self.assertEqual(self.ll.head.val, 3)
+        self.assertEqual(self.ll.tail.val, 1)
+
+    def test_reverse_recurive_single_node(self):
+        self.ll.append(1)
+        self.ll.reverse_recurisve()
         self.assertEqual(self.ll.get_first_node().val, 1)
         self.assertEqual(self.ll.get_last_node().val, 1)
         self.assertEqual(self.ll.head.val, 1)
