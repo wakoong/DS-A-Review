@@ -134,7 +134,18 @@ class LinkedList:
   
   def get_last_node(self):
     return self.tail
-   
+
+  def get_mid_node(self):
+     if not self.head or not self.head.next:
+        return self.head
+     
+     slow, fast = self.head, self.head
+     while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+
+     return slow
+
   def reverse(self):
     if not self.head:
        return None
@@ -281,6 +292,16 @@ class TestLinkedList(unittest.TestCase):
         self.ll.reverse()
         self.assertIsNone(self.ll.get_first_node())
         self.assertIsNone(self.ll.get_last_node())
+
+    def test_get_mid_node(self):
+       self.assertEqual(self.ll.get_mid_node(), None)
+       self.ll.append(1)
+       self.assertEqual(self.ll.get_mid_node().val, 1)
+       self.ll.append(2)
+       self.ll.append(3)
+       self.assertEqual(self.ll.get_mid_node().val, 2)
+       self.ll.append(4)
+       self.assertEqual(self.ll.get_mid_node().val, 3)
 
 if __name__ == '__main__':
     unittest.main()
